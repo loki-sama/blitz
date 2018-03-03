@@ -1,0 +1,14 @@
+{
+  "name": "blitztoken-web",
+  "version": "0.0.1",
+  "description": "Web frontend for Blitztoken transactions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Blitztoken team",
+  "license": "ISC",
+  "dependencies": {
+    "web3": "github:ethereum/web3.js"
+  }
+}
