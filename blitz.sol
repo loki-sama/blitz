@@ -178,7 +178,8 @@ contract ERC20Basic {
        * Fund tokens will be distributed based on amount of ETH sent by investor, and calculated
        * using tokensPerEth value.
        */
-      function buyToken(address beneficiary) public onlyNotFunded payable {
+      function buyToken() public onlyNotFunded payable {
+        address beneficiary = msg.sender;
         require (beneficiary != address(0));
         require (now >= icoStart && now <= icoEnd);
         require (msg.value > 0);
@@ -205,16 +206,8 @@ contract ERC20Basic {
         if(totalSupply == hardCap){
           funded = true;
         }
-      //check if amount payed is valid
-      //check if token still can be sold
-      //then give amount of token
-      //transfer amount of bought token to address
-      //transfer from address to bank (not implementing now)
     }
     
-    function buyToken() public onlyNotFunded payable {
-        buyToken(msg.sender);    
-    }
     
     function giveToken(uint256 numTokens, address beneficiary) public onlyOwner {
         // example: 999, "0x14723a09acff6d2a60dcdf7aa4aff308fddc160c"
@@ -242,7 +235,7 @@ contract ERC20Basic {
     }
     
     
-    function fundBlitz() public{
+ /*   function fundBlitz() public{
       require(totalSupply >= hardCap);
       owner.transfer(totalEthAmount);
     
@@ -250,7 +243,7 @@ contract ERC20Basic {
       //yes - nothing
       //no - transfer from bank to list of _to addresses
     }
-    
+    */
     function refund() public payable onlyOwner onlyNotFunded{
       require(totalEthAmount == msg.value);
       for (uint256 i = 0; i < beneficiaries.length; i++) {
@@ -266,15 +259,19 @@ contract ERC20Basic {
       
     }
     
+    /**
+     * 
+     *  Transfer money from bank to distribute under shareholder
+     **/
     function pushPayin() public payable onlyBank onlyFunded{
       require (msg.value > 0);
       distribute = distribute.add(msg.value);
-    
-      //event payin
-      //check if bank
-    //bank transfers created revenue to our smart contract
     }
     
+     /**
+     * 
+     *  Distribute under shareholder
+     **/
     function pullPayout() public onlyFunded{
       require(distribute > 0);
       uint256 distributeTmp = distribute;
@@ -282,8 +279,7 @@ contract ERC20Basic {
       for (uint256 i = 0; i < beneficiaries.length; i++) {
         beneficiaries[i].transfer(balances[beneficiaries[i]].div(totalEthAmount).mul(distributeTmp));
       }
-    //check if shareholder
-    //give shareholder his share of revenue (created by pushPayin)
+
     }
     
     /**
@@ -291,7 +287,7 @@ contract ERC20Basic {
      * We fallback to the partcipate function
      */
     function () external payable {
-       buyToken(msg.sender);
+       buyToken();
     }
 
 }
