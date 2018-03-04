@@ -33,6 +33,37 @@ body, html {
 }
 </style>
 
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script type="text/javascript">
+     google.charts.load('current', {'packages':['corechart']});
+     google.charts.setOnLoadCallback(drawChart);
+     var assets_sold = 10;
+     function drawChart() {
+
+       var data = google.visualization.arrayToDataTable([
+         ['Task', 'Hours per Day'],
+         ['Sold to investor',     assets_sold],
+         ['Availible to investors',  18],
+         ['Allocated to Team',     6]
+         
+       ]);
+
+       var options = {
+         title: 'Asset allocation',
+         colors: ['purple','#0080ff', '#ff0000']
+       };
+
+       var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+       chart.draw(data, options);
+     }
+   </script>
+
+   <script>
+   
+   </script>
+
+
 
 </head>
 
@@ -157,14 +188,7 @@ body, html {
       <p>If the threshold is met, then the film will go into production, and you will be rewarded Ethereum depending on the amount of Blitz tokens you hold when the film begins to gross. However if the threshold is not met, rest assured! Your funds will be returned right back to you.</p>
     </div>
     <div class="blitz-col m6">
-      <p class="blitz-wide"><i class="material-icons blitz-margin-right">people</i>Investors</p>
-      <div class="blitz-grey">
-        <div class="blitz-container blitz-dark-grey blitz-center" style="width:70%">70%</div>
-      </div>
-      <p class="blitz-wide"><i class="material-icons blitz-margin-right">videocam</i>Film Crew</p>
-      <div class="blitz-grey">
-        <div class="blitz-container blitz-dark-grey blitz-center" style="width:20%">20%</div>
-      </div>
+      <div class="blitz-center" id="piechart" style="width: 90%; height: 90%;"></div>
     </div>
   </div>
 </div>
