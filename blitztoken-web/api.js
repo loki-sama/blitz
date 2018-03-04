@@ -1,19 +1,39 @@
+/**
+
+README
+
+This is using ropsten test net
+
+Todo:
+
+1. Change the global address var to the relevant contract address
+2. In init() function paste the ABI from remix into web3.eth.contract parameter
+3. Access the relevant functions and fields of the contract (look at the functions at the bottom for an example)
+4. React upon changes on the blockchain. Look at function setupHandlers on how to to this
+
+*/
+
+
 var blitz;
 var blitzContract;
 var web3;
+var address = "0x15ecFc141e68Ff6B3BacF0a1aC089329f9f90897"
 
 function init() {
 	// init web3
 	if (typeof web3 !== 'undefined') {
 	    web3 = new Web3(web3.currentProvider);
 	} else {
-	    web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+	    web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io" /*"http://localhost:8545"*/));
 	}
 
 	// init Blitz -- params: Operating Ethereum account
 	//		constants: Etherium Contract address
 
 	web3.eth.defaultAccount = web3.eth.accounts[0];
+
+
+	// NOTE: PASTE ABI FROM REMIX HERE
 	blitzContract = web3.eth.contract([
 	{
 		"constant": true,
@@ -424,14 +444,12 @@ function init() {
 		"type": "function"
 	}
 ]);
-	blitz = blitzContract.at("0xe8561c00c9d2857c54fc847c05fcd7f7fb1d5e3c");
+	blitz = blitzContract.at(address);
 }
 
 
 function setUpHandlers() {
 	y = web3.eth.filter('latest');
-
-	const address = "0x15ecFc141e68Ff6B3BacF0a1aC089329f9f90897"
 
 	y.watch((err, res) => {
 	  if (err) {
@@ -450,16 +468,6 @@ function setUpHandlers() {
 	});
 }
 
-
-
-// set up acquisition transaction
-// .....
-
-// confirm acquisition transaction
-// .....
-
-// watch for transaction done event
-// .....
 
 function getTokensPerEth() {
 	var tokensPerEth = web3.toDecimal(blitz.getTokensPerEth());
